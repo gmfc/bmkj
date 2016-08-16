@@ -2,41 +2,40 @@ var bigInt = require("big-integer");
 var rlcg = require('./rlcg.js');
 
 function omi(){
-  this.dicio = "ABCDEFGHIJKLMNOPQRSTUWXYZ§&%$"
+  this.hashDicio = "ABCDEFGHIJKLMNOPQRSTUWXYZ§&%$";
+  this.textDicio = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  this.hashBase = 64;
+  this.textBase = 37;
 }
 
 omi.prototype.readOmi = function(VisualHash){
   // hash base 64!
   // omi base 37
   var hash  = this.processVisualHash(VisualHash);
-  var magic = new rlcg(hash,64);
-  var omiText = magic.next().toString(37);
+  var magic = new rlcg(hash,this.hashBase);
+  var omiText = magic.next().toString(this.textBase);
   omiText = omiText.replaceAll("<36>"," ");
   return omiText;
 }
 
 omi.prototype.findOmi = function(omi){
   omi = omi.replaceAll(" ","<36>");
-  var magic = new rlcg(omi,37);
-  var hash = magic.prev().toString(64);
+  var magic = new rlcg(omi,this.textBase);
+  var hash = magic.prev().toString(this.hashBase);
   return this.processRawHash(hash);
 }
 
 
-omi.prototype.processRawHash = function(hashRAW){
-  
-  //var dicio  = "ABCDEFGHIJKLMNOPQRSTUWXYZ§&%$";
-  
-  for(var i=36;i<64;i++){
-    hashRAW = hashRAW.replaceAll("<"+i+">",this.dicio.charAt(i-36));    
+omi.prototype.processRawHash = function(hashRAW){ 
+  for(var i=36;i<this.hashBase;i++){
+    hashRAW = hashRAW.replaceAll("<"+i+">",this.hashDicio.charAt(i-36));    
   }
   return hashRAW;
 }
 
 omi.prototype.processVisualHash = function(visualHash){
-  //var dicio  = "ABCDEFGHIJKLMNOPQRSTUWXYZ§&%$";
-  for(var i=36;i<64;i++){
-    visualHash = visualHash.replaceAll(this.dicio.charAt(i-36),"<"+i+">");    
+  for(var i=36;i<this.hashBase;i++){
+    visualHash = visualHash.replaceAll(this.hashDicio.charAt(i-36),"<"+i+">");    
   }
   return visualHash;
 }
