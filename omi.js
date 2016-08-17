@@ -2,15 +2,12 @@ var bigInt = require("big-integer");
 var rlcg = require('./rlcg.js');
 
 function omi(){
-  this.hashDicio = "ABCDEFGHIJKLMNOPQRSTUWXYZ§&%$";
-  this.textDicio = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  this.hashBase = 64;
+  this.hashDicio = "ABCDEFGHIJKLMNOPQRSTUWXYZ§&%$#@?+£¢αβγδεζηθλμπρΣΦψÇюѣѫдж";
   this.textBase = 37;
+  this.hashBase = this.textBase + this.hashDicio.length -1;
 }
 
 omi.prototype.readOmi = function(VisualHash){
-  // hash base 64!
-  // omi base 37
   var hash  = this.processVisualHash(VisualHash);
   var magic = new rlcg(hash,this.hashBase);
   var omiText = magic.next().toString(this.textBase);
