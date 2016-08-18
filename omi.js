@@ -2,7 +2,7 @@ var bigInt = require("big-integer");
 var rlcg = require('./rlcg.js');
 
 function omi(){
-  this.hashDicio = "ABCDEFGHIJKLMNOPQRSTUWXYZ§&%$#@?+£¢αβγδεζηθλμπρΣΦψÇюѣѫдж";
+  this.hashDicio = "ABCDEFGHIJKLMNOPQRSTUWXYZ@+=$#*-&!";
   this.textBase = 37;
   this.hashBase = this.textBase + this.hashDicio.length -1;
 }
@@ -35,6 +35,28 @@ omi.prototype.processVisualHash = function(visualHash){
     visualHash = visualHash.replaceAll(this.hashDicio.charAt(i-36),"<"+i+">");    
   }
   return visualHash;
+}
+
+omi.prototype.getNextNHash = function(visualHash,n){
+  var rawHash = this.processVisualHash(visualHash);
+  var hashNum = bigInt(rawHash,this.hashBase);
+  var v = [];
+  for(var i=0;i<n;i++){
+    v[i] = this.processRawHash(bigInt(hashNum).toString(this.hashBase));
+    hashNum = bigInt(hashNum).next();
+  }
+  return v;
+}
+
+omi.prototype.getPrevNHash = function(visualHash,n){
+  var rawHash = this.processVisualHash(visualHash);
+  var hashNum = bigInt(rawHash,this.hashBase);
+  var v = [];
+  for(var i=0;i<n;i++){
+    v[i] = this.processRawHash(bigInt(hashNum).toString(this.hashBase));
+    hashNum = bigInt(hashNum).prev();
+  }
+  return v;
 }
 
 String.prototype.replaceAll = function (find, replace) {

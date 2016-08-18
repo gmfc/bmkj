@@ -17,7 +17,8 @@
     "url": "https://github.com/gmfcProjs/babelomikuji/issues"
   },
   "dependencies": {
-    "big-integer": "^1.6.15"
+    "big-integer": "^1.6.15",
+    "browserify": "^13.1.0"
   },
   "homepage": "https://github.com/gmfcProjs/babelomikuji#readme"
 }
